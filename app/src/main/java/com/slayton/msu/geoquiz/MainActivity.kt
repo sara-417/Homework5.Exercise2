@@ -5,14 +5,14 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.slayton.msu.geoquiz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-//    private lateinit var trueButton : Button
-//    private lateinit var falseButton : Button
+
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -29,30 +29,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        trueButton = findViewById(R.id.true_button)
-//        falseButton = findViewById(R.id.false_button)
-
         binding.trueButton.setOnClickListener{
-            val snackbar = Snackbar.make(
-                it,
-                "Correct",
-                Snackbar.LENGTH_LONG)
-            snackbar.show()
+            checkAnswer(true)
         }
 
         binding.falseButton.setOnClickListener{
-            val snackbar = Snackbar.make(
-                it,
-                "Incorrect",
-                Snackbar.LENGTH_LONG)
-            snackbar.setTextColor(Color.BLACK)
-            snackbar.setBackgroundTint(Color.RED)
-            snackbar.show()
+            checkAnswer(false)
         }
         binding.nextButton.setOnClickListener{
             currentIndex=(currentIndex + 1) % questionBank.size
-           // val questionTextResId = questionBank[currentIndex].textResId
-            //binding.questionTextView.setText(questionTextResId)
             updateQuestion()
         }
         updateQuestion()
@@ -61,5 +46,18 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         binding.questionTextView.setText(questionTextResId)
+    }
+
+    private fun checkAnswer (userAnswer: Boolean) {
+        val correctAnswer = questionBank[currentIndex].answer
+
+        val messageResId = if (userAnswer == correctAnswer) {
+            R.string.correct_toast
+        }
+        else {
+            R.string.incorrect_toast
+        }
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+            .show()
     }
 }

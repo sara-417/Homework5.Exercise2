@@ -9,4 +9,6 @@
     <string name="question_americas">The Amazon River is the largest river in the Americas.</string>
     <string name="question_asia">Lake Baikal is the world\'s oldest and deepest freshwater lake.</string>
     <string name="question_australia">Canberra is the capital of Australia.</string>
+    <string name="correct_toast">Correct!!</string>
+    <string name="incorrect_toast">Incorrect!!</string>
 </resources>
