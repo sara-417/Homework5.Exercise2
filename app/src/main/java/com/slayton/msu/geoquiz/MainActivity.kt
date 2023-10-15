@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-                cheatLauncher.launch(intent)
+            cheatLauncher.launch(intent)
         }
         binding.nextButton.setOnClickListener{
             quizViewModel.moveToNext()

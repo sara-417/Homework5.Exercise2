@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.slayton.msu.geoquiz.databinding.ActivityCheatBinding
 import com.slayton.msu.geoquiz.databinding.ActivityMainBinding
 
-const val EXTRA_ANSWER_SHOWN = "com.slayton.msu.geoquiz.anwswer_shown"
+const val EXTRA_ANSWER_SHOWN =
+    "com.slayton.msu.geoquiz.anwswer_shown"
 
 private const val EXTRA_ANSWER_IS_TRUE =
     "com.slayton.msu.geoquiz.answer_is_true"
@@ -17,6 +19,7 @@ class CheatActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityCheatBinding
     private var answerIsTrue = false
+    private val quizViewModel: QuizViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,14 +30,25 @@ class CheatActivity : AppCompatActivity() {
 
         answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
 
-        binding.showAnswerButton.setOnClickListener {
-            val answerText = when {
-                answerIsTrue -> R.string.true_button
-                else -> R.string.false_button
-            }
-            binding.answerTextView.setText(answerText)
-            setAnswerShownResult(true)
+        val answerShown = quizViewModel.answerShown
+
+        if(answerShown) {
+            setAnswerText()
         }
+
+        binding.showAnswerButton.setOnClickListener {
+            setAnswerText()
+            quizViewModel.answerShown = true
+            setAnswerShownResult(quizViewModel.answerShown)
+        }
+    }
+
+    private fun setAnswerText() {
+        val answerText = when {
+            answerIsTrue -> R.string.true_button
+            else -> R.string.false_button
+        }
+        binding.answerTextView.setText(answerText)
     }
 
     private fun setAnswerShownResult(isAnswerShown:Boolean) {
